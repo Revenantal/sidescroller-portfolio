@@ -1,0 +1,173 @@
+@import '_variables.scss';
+
+$sky-color: #D0F4F7;
+$frame-width: 20vw;
+$frame-height: 20vh;
+
+body, html {
+    margin: 0;
+    padding:0;
+    overflow-x:hidden;
+}
+
+.overworld {
+    will-change: transform;
+    width: 200vw;
+    height: 100vh;
+    position: absolute;
+
+    .ground {
+        background-image: url(/grass.svg); 
+        background-size:contain;
+        height:20%;
+        bottom: 20%;
+        position: relative;
+    }
+
+    .backgrounds {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        background: $sky-color;
+
+        div {
+            background-size:contain;
+            position: absolute;
+            width:100%
+        }
+
+        .grass {
+            height: 34%;
+            bottom: 0;
+            background-image: url(/grass-background.svg);
+        }
+
+        .cloud-1 {
+            height: 50%;
+            bottom: 0%;
+            background-image: url(/cloud-background-1.svg);
+          
+        }
+
+        .cloud-2 {
+            height: 60%;
+            bottom: 0%;
+            background-image: url(/cloud-background-2.svg);
+        }
+
+        .clouds {
+            height: 50%;
+            top: 0%;
+            @for $i from 1 through 4 {
+                cloud:nth-child(4n + #{$i}) {
+                    position: absolute;
+                    background-image: url(/cloud-#{$i}.svg);
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+    }
+
+    .player {
+        position: absolute;
+        bottom: 20%;
+        left: 100px;
+        height:200px;
+        width: 140px;
+        background-image: url(/player.svg);
+        background-size:contain;
+        background-repeat: no-repeat;
+    }
+
+}
+
+.skyworld {
+    will-change: transform;
+    height:200vh; 
+    background:linear-gradient(    to bottom,
+    red 20%,
+    orange 20% 40%,
+    yellow 40% 60%,
+    green 60% 80%,
+    blue 80%);
+    position:absolute;
+    width:100vw;
+}
+
+.castleFrame {
+    will-change: transform;
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    top:0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
+    clip-path: polygon(
+        0vw 0vh, 
+        0vw 100vh, 
+        calc((100vw - $frame-width)/2) 100vh, 
+        calc((100vw - $frame-width)/2) calc((100vh - $frame-height)/2), 
+        calc((100vw + $frame-width)/2) calc((100vh - $frame-height)/2), 
+        calc((100vw + $frame-width)/2) calc((100vh + $frame-height)/2), 
+        calc((100vw - $frame-width)/2) calc((100vh + $frame-height)/2), 
+        calc((100vw - $frame-width)/2) 100vh, 
+        100% 100%,
+        100% 0vh
+    );
+
+    .frame {
+        background:transparent;
+        border: 1px solid lime;
+        top: 50vh;
+        left: 50vw;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        width: $frame-width; 
+        height: $frame-height;
+    }
+
+    .ceiling {
+        background-image: url(/castle-ceiling.svg); 
+        background-size:contain;
+        height: 10%;
+        top: 0;
+        width: 100%;
+        position: absolute;
+    }
+
+    .ground {
+        background-image: url(/castle-floor.svg); 
+        background-size:contain;
+        height: 20%;
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+    }
+}
+
+.castleWorld {
+    will-change: transform;
+    position:absolute;
+    width:200vw;
+    height:100vh;
+    top:0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
+    
+    .ceiling {
+        background-image: url(/castle-ceiling.svg); 
+        background-size:contain;
+        height: 10%;
+        top: 0;
+        width: 100%;
+        position: absolute;
+    }
+
+    .ground {
+        background-image: url(/castle-floor.svg); 
+        background-size:contain;
+        height: 20%;
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+    }
+}
