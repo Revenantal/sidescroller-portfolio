@@ -109,8 +109,22 @@ body, html {
         background-image: url(/ladder.svg); 
         background-size:contain;
         width: 150px;
-        left:5%;
+        left:128px;
         position: relative;
+    }
+
+    .frozen-player {
+        visibility: hidden;
+        position: absolute;
+        bottom: 20%;
+        left: 120px;
+        height:200px;
+        width:174px;
+        background-image: url(/player-sprite.svg);
+        background-size:contain;
+        background-repeat: no-repeat;
+        background-size: 100% 500%;
+        background-position: 100% 75%;
     }
 }
 

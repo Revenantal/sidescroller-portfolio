@@ -40,15 +40,15 @@ export function animations() {
 	let testTL = gsap.timeline({
 		//yoyo: true,
 		repeat: -1,
-		repeatDelay: 1,
+		//repeatDelay: 5,
 		ease: 'none',
 	})
-	//testTL.add(masterTL.tweenFromTo("castle-world-start", 12));
+	//testTL.add(masterTL.tweenFromTo(2, 5));
 	//masterTL.pause()
 
 	document.addEventListener('keyup', event => {
 		if (event.code === 'Space') {
-			//testTL.paused( !testTL.paused() );
+			testTL.paused( !testTL.paused() );
 		}
 	})
 
@@ -92,6 +92,7 @@ function skyworldTL() {
 	});
 	let skyworld = document.querySelector('.skyworld')
 	let overworld = document.querySelector('.overworld')
+	let frozenPlayer = skyworld.querySelector('.frozen-player')
 
 	let scrollRatePerSecond = windowHeight / globalDuration;
 	let skyWorldDuration = skyworld.clientHeight / scrollRatePerSecond;
@@ -105,6 +106,7 @@ function skyworldTL() {
 		y: 0,
 		duration: skyWorldDuration
 	}, '<')
+	tl.add(snapshotPlayer(player, frozenPlayer))
 	tl.addLabel('skyworld-done')
 	return tl;
 }
@@ -127,19 +129,29 @@ function castleWorldTL() {
 
 	let panSpeed = windowWidth / globalDuration;
 	let mainSectionDuration = mainSection.clientWidth / panSpeed;
+	let playerXDistanceToLeft =  player.getBoundingClientRect().x + player.clientWidth
+	let playerXDistanceToRight =  windowWidth - player.getBoundingClientRect().x;
+	let playerEntryDuration = globalDuration * (playerXDistanceToLeft / windowWidth);
+	let playerExitDuration = globalDuration * (playerXDistanceToRight / windowWidth);
 
 	tl.addLabel('castle-show')
+	tl.call(playerStand)
 	tl.to(skyworld, { scale: () => frame.clientWidth / windowWidth }, 'show-castle')
 	tl.to(skyworld, { y:() => windowHeight/2 - frame.clientHeight/2, transformOrigin: 'top' }, 'show-castle')
 	tl.from(frameSection, { scale: () => windowWidth / frame.clientWidth }, 'show-castle')
+	tl.add(revealPlayer(player))
+	tl.call(playerWalk)
+	tl.set(player, { x:  -playerXDistanceToLeft })
+	tl.to(player, { x: 0, duration: playerEntryDuration })
+	tl.call(playerStand)
 	tl.addLabel('castle-pan-left')
 	tl.call(playerWalk)
-	tl.to(skyworld, { x: -windowWidth }, "pan-left")
-	tl.to(frameSection, { x: -windowWidth }, "pan-left")
-	tl.fromTo(mainSection, { x: windowWidth }, {x: -mainSection.clientWidth , duration: mainSectionDuration + globalDuration  }, "pan-left")
+	tl.to(skyworld, { x: -windowWidth }, "castle-pan-left")
+	tl.to(frameSection, { x: -windowWidth }, "castle-pan-left")
+	tl.fromTo(mainSection, { x: windowWidth }, {x: -mainSection.clientWidth , duration: mainSectionDuration + globalDuration  }, "castle-pan-left")
 	tl.fromTo(tankSection, { x: windowWidth }, {x: 0 }, ">-" + globalDuration)
 	tl.fromTo(waterWorld, { x: windowWidth }, {x: 0 }, ">-" + globalDuration)
-
+	tl.to(player, { x: playerXDistanceToRight, duration: playerExitDuration })
 	return tl;
 }
 
@@ -160,17 +172,20 @@ function waterWorldTL() {
 
 	let panSpeed = windowWidth / globalDuration;
 	let waterMainSectionDuration = waterMainSection.clientWidth / panSpeed;
+	let playerXDistanceToLeft =  player.getBoundingClientRect().x + player.clientWidth
+	let playerEntryDuration = globalDuration * (playerXDistanceToLeft / windowWidth);
 
 
 	tl.addLabel('water-show-tank')
-	tl.call(playerStand)
-	tl.to(player, { scale: 1 } , 'show-tank')
-	tl.from(waterTankSection, { scale: () => castleTank.clientWidth / windowWidth }, 'show-tank')
-	tl.to(castleTankSection, { scale: () => windowWidth / castleTank.clientWidth }, 'show-tank')
-	tl.addLabel('water-pan-left')
+	tl.to(player, { scale: 1 } , 'water-show-tank')
+	tl.from(waterTankSection, { scale: () => castleTank.clientWidth / windowWidth }, 'water-show-tank')
+	tl.to(castleTankSection, { scale: () => windowWidth / castleTank.clientWidth }, 'water-show-tank')
 	tl.call(playerWalk)
-	tl.to(waterTankSection, { x: -windowWidth }, 'pan-left')
-	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -windowWidth, duration: waterMainSectionDuration  }, 'pan-left')
+	tl.set(player, { x:  -playerXDistanceToLeft })	
+	tl.to(player, { x: 0, duration: playerEntryDuration })
+	tl.addLabel('water-pan-left')
+	tl.to(waterTankSection, { x: -windowWidth }, 'water-pan-left')
+	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -windowWidth, duration: waterMainSectionDuration  }, 'water-pan-left')
 
 	return tl;
 }
@@ -248,5 +263,24 @@ function playerClimb() {
 
 function playerWalk() {
 	playerTL.tweenFromTo("walk-start", "walk-end", { onComplete: playerWalk } )
+}
+
+function snapshotPlayer(activePlayer, frozenPlayer) {
+
+	let tl = gsap.timeline()
+
+	let activeBounding = player.getBoundingClientRect()
+	let frozenBounding = frozenPlayer.getBoundingClientRect()
+
+	tl.set(frozenPlayer, { y:() => activeBounding.y - frozenBounding.y, autoAlpha: 1 })
+	tl.set(activePlayer, { autoAlpha: 0 })
+
+	return tl
+}
+
+function revealPlayer(activePlayer) {
+	let tl = gsap.timeline()
+	tl.set(activePlayer, { autoAlpha: 1 })
+	return tl
 }
 
