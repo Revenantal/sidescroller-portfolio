@@ -6,13 +6,51 @@ gsap.registerPlugin(ScrollTrigger);
 let globalDuration = 3;
 let windowWidth = document.documentElement.clientWidth;
 let windowHeight = document.documentElement.clientHeight;
+let player = document.querySelector('.player');
+let playerTL = null;
+let masterTL = null;
+
+
 
 export function animations() {
-	let masterTL = gsap.timeline()
-	masterTL.add(overworldTL())
-	masterTL.add(skyworldTL())
-	masterTL.add(castleWorldTL())
+	masterTL = gsap.timeline({
+		//yoyo: true,
+		repeat: -1,
+		repeatDelay: 1,
+		ease: 'none',
+		/*scrollTrigger: {
+			scrub:true,
+			pin: '#app',
+			end: '3000%'
+		}*/
+	})
 
+	initPlayer()
+	masterTL.addLabel('start')
+	masterTL.add(overworldTL())
+	masterTL.addLabel('sky-world-start')
+	masterTL.add(skyworldTL())
+	masterTL.addLabel('castle-world-start')
+	masterTL.add(castleWorldTL())
+	masterTL.addLabel('water-world-start')
+	masterTL.add(waterWorldTL())
+	masterTL.addLabel('end')
+
+
+	let testTL = gsap.timeline({
+		//yoyo: true,
+		repeat: -1,
+		repeatDelay: 1,
+		ease: 'none',
+	})
+	//testTL.add(masterTL.tweenFromTo("castle-world-start", 12));
+	//masterTL.pause()
+
+	document.addEventListener('keyup', event => {
+		if (event.code === 'Space') {
+			//testTL.paused( !testTL.paused() );
+		}
+	})
 
 
 }
@@ -26,18 +64,21 @@ function overworldTL() {
 	});
 
 	let overworld = document.querySelector('.overworld');
-	let player = overworld.querySelector('.player');
+	
 	let ground = overworld.querySelector('.ground');
 	let cloudsElem = overworld.querySelector('.backgrounds > .clouds');
+	let skyworld = document.querySelector('.skyworld')
 
-	// add animations and labels to the timeline
-	tl.to(ground, {
-		x:() => windowWidth - ground.clientWidth, 
-	});
+
+	tl.call(playerWalk)
+	tl.to(ground, { x:() => windowWidth - ground.clientWidth })
+	tl.fromTo(skyworld, { x:() => ground.clientWidth - windowWidth }, { x: 0 }, "0")
 
 	overworld.querySelectorAll('.backgrounds > *').forEach((background) => {
 		tl.add(parallaxBackground(background), "0");
-	});
+	})
+
+	tl.call(playerStand)
 
 	return tl;	
 }
@@ -49,13 +90,14 @@ function skyworldTL() {
 			ease: 'linear'
 		}
 	});
-
 	let skyworld = document.querySelector('.skyworld')
 	let overworld = document.querySelector('.overworld')
 
 	let scrollRatePerSecond = windowHeight / globalDuration;
 	let skyWorldDuration = skyworld.clientHeight / scrollRatePerSecond;
 
+	tl.addLabel('skyworld-show')
+	tl.call(playerClimb)
 	tl.to(overworld, {y: windowHeight})
 	tl.fromTo(skyworld, {
 		y:() => window.scrollY - skyworld.clientHeight, 
@@ -63,7 +105,7 @@ function skyworldTL() {
 		y: 0,
 		duration: skyWorldDuration
 	}, '<')
-
+	tl.addLabel('skyworld-done')
 	return tl;
 }
 
@@ -76,22 +118,59 @@ function castleWorldTL() {
 	});
 
 	let skyworld = document.querySelector('.skyworld')
-	let castleFrame = document.querySelector('.castleFrame')
-	let frame = castleFrame.querySelector('.frame')
 	let castleWorld = document.querySelector('.castleWorld')
+	let frameSection = castleWorld.querySelector('.frame-section')
+	let frame = frameSection.querySelector('.frame')
+	let mainSection = castleWorld.querySelector('.main-section')
+	let tankSection = castleWorld.querySelector('.tank-section')
+	let waterWorld = document.querySelector('.waterWorld')
 
 	let panSpeed = windowWidth / globalDuration;
-	let castleWorldDuration = castleWorld.clientWidth / panSpeed;
+	let mainSectionDuration = mainSection.clientWidth / panSpeed;
 
-	tl.addLabel('show-castle')
-	tl.to(skyworld, { scale: () => frame.clientWidth / windowWidth })
+	tl.addLabel('castle-show')
+	tl.to(skyworld, { scale: () => frame.clientWidth / windowWidth }, 'show-castle')
 	tl.to(skyworld, { y:() => windowHeight/2 - frame.clientHeight/2, transformOrigin: 'top' }, 'show-castle')
-	tl.from(castleFrame, { scale: () => windowWidth / frame.clientWidth }, 'show-castle')
-	tl.addLabel('pan-left')
-	tl.to(castleFrame, { x: -windowWidth })
+	tl.from(frameSection, { scale: () => windowWidth / frame.clientWidth }, 'show-castle')
+	tl.addLabel('castle-pan-left')
+	tl.call(playerWalk)
 	tl.to(skyworld, { x: -windowWidth }, "pan-left")
-	tl.fromTo(castleWorld, { x: windowWidth }, {x: windowWidth - castleWorld.clientWidth , duration: castleWorldDuration }, "pan-left")
+	tl.to(frameSection, { x: -windowWidth }, "pan-left")
+	tl.fromTo(mainSection, { x: windowWidth }, {x: -mainSection.clientWidth , duration: mainSectionDuration + globalDuration  }, "pan-left")
+	tl.fromTo(tankSection, { x: windowWidth }, {x: 0 }, ">-" + globalDuration)
+	tl.fromTo(waterWorld, { x: windowWidth }, {x: 0 }, ">-" + globalDuration)
 
+	return tl;
+}
+
+function waterWorldTL() {
+	let tl = gsap.timeline({
+		defaults: {
+			duration: globalDuration,
+			ease: 'linear'
+		}
+	});
+
+	let waterWorld = document.querySelector('.waterWorld')
+	let castleWorld = document.querySelector('.castleWorld')
+	let waterTankSection = waterWorld.querySelector('.tank-section')
+	let castleTankSection = castleWorld.querySelector('.tank-section')
+	let castleTank = castleTankSection.querySelector('.tank')
+	let waterMainSection = waterWorld.querySelector('.main-section')
+
+	let panSpeed = windowWidth / globalDuration;
+	let waterMainSectionDuration = waterMainSection.clientWidth / panSpeed;
+
+
+	tl.addLabel('water-show-tank')
+	tl.call(playerStand)
+	tl.to(player, { scale: 1 } , 'show-tank')
+	tl.from(waterTankSection, { scale: () => castleTank.clientWidth / windowWidth }, 'show-tank')
+	tl.to(castleTankSection, { scale: () => windowWidth / castleTank.clientWidth }, 'show-tank')
+	tl.addLabel('water-pan-left')
+	tl.call(playerWalk)
+	tl.to(waterTankSection, { x: -windowWidth }, 'pan-left')
+	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -windowWidth, duration: waterMainSectionDuration  }, 'pan-left')
 
 	return tl;
 }
@@ -137,5 +216,37 @@ function generateClouds(elem, count = 10) {
 	}
 	elem.appendChild(frag);
 	return clouds;
+}
+
+function initPlayer() {
+	playerTL = gsap.timeline({
+		paused: true,
+		ease: 'none',
+	});
+
+	let player = document.querySelector('.player')
+
+	playerTL.set(player, { backgroundPosition: '100% 0%'}, "0").addLabel('stand')
+	playerTL.set(player, { backgroundPosition: '100% 25%'}, "2").addLabel('walk-start')
+	playerTL.set(player, { backgroundPosition: '100% 50%'}, "<0.2")
+	playerTL.set( {}, {}, "<0.2" ).addLabel('walk-end')
+	playerTL.set(player, { backgroundPosition: '100% 75%'}, '4').addLabel('climb-start')
+	playerTL.set(player, { backgroundPosition: '100% 100%'}, "<0.2")
+	playerTL.set( {}, {}, "<0.2" ).addLabel('climb-end')
+
+	playerTL.timeScale()
+
+}
+
+function playerStand() {
+	playerTL.tweenFromTo("stand", 0)
+}
+
+function playerClimb() {
+	playerTL.tweenFromTo("climb-start", "climb-end", { onComplete: playerClimb } )
+}
+
+function playerWalk() {
+	playerTL.tweenFromTo("walk-start", "walk-end", { onComplete: playerWalk } )
 }
 

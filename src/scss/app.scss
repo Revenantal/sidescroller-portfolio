@@ -1,20 +1,44 @@
 @import '_variables.scss';
 
+
 $sky-color: #D0F4F7;
+$water-color: #A1D6E7;
+
+
 $frame-width: 20vw;
 $frame-height: 20vh;
 
 body, html {
     margin: 0;
     padding:0;
-    overflow-x:hidden;
 }
+
+#app {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.player {
+    position: absolute;
+    bottom: 20%;
+    left: 120px;
+    height:200px;
+    width:174px;
+    background-image: url(/player-sprite.svg);
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-size: 100% 500%;
+
+}
+
 
 .overworld {
     will-change: transform;
     width: 200vw;
     height: 100vh;
     position: absolute;
+    left:0;
 
     .ground {
         background-image: url(/grass.svg); 
@@ -68,63 +92,32 @@ body, html {
             }
         }
     }
-
-    .player {
-        position: absolute;
-        bottom: 20%;
-        left: 100px;
-        height:200px;
-        width: 140px;
-        background-image: url(/player.svg);
-        background-size:contain;
-        background-repeat: no-repeat;
-    }
-
 }
 
 .skyworld {
+    left: 0;
     will-change: transform;
     height:200vh; 
-    background:linear-gradient(    to bottom,
-    red 20%,
-    orange 20% 40%,
-    yellow 40% 60%,
-    green 60% 80%,
-    blue 80%);
+    background:linear-gradient(to top, $sky-color, darken($sky-color, 50));
     position:absolute;
     width:100vw;
+
+    .ladder {
+        height: calc(100% + 80vh);
+        top: 0;
+        bottom: -100vh;
+        background-image: url(/ladder.svg); 
+        background-size:contain;
+        width: 150px;
+        left:5%;
+        position: relative;
+    }
 }
 
-.castleFrame {
-    will-change: transform;
+.castleWorld {
     position:absolute;
-    width:100vw;
-    height:100vh;
-    top:0;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
-    clip-path: polygon(
-        0vw 0vh, 
-        0vw 100vh, 
-        calc((100vw - $frame-width)/2) 100vh, 
-        calc((100vw - $frame-width)/2) calc((100vh - $frame-height)/2), 
-        calc((100vw + $frame-width)/2) calc((100vh - $frame-height)/2), 
-        calc((100vw + $frame-width)/2) calc((100vh + $frame-height)/2), 
-        calc((100vw - $frame-width)/2) calc((100vh + $frame-height)/2), 
-        calc((100vw - $frame-width)/2) 100vh, 
-        100% 100%,
-        100% 0vh
-    );
-
-    .frame {
-        background:transparent;
-        border: 1px solid lime;
-        top: 50vh;
-        left: 50vw;
-        transform: translate(-50%, -50%);
-        position: absolute;
-        width: $frame-width; 
-        height: $frame-height;
-    }
+    height:100%;
+    width:100%;
 
     .ceiling {
         background-image: url(/castle-ceiling.svg); 
@@ -133,6 +126,7 @@ body, html {
         top: 0;
         width: 100%;
         position: absolute;
+        will-change: transform;
     }
 
     .ground {
@@ -143,27 +137,109 @@ body, html {
         width: 100%;
         position: absolute;
     }
+
+    .wall {
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
+    }
+
+    .frame-section {
+        will-change: transform;
+        position:absolute;
+        width:100vw;
+        height:100vh;
+        top:0;
+
+        clip-path: polygon(
+            0vw 0vh, 
+            0vw 100vh, 
+            calc((100vw - $frame-width)/2) 100vh, 
+            calc((100vw - $frame-width)/2) calc((100vh - $frame-height)/2), 
+            calc((100vw + $frame-width)/2) calc((100vh - $frame-height)/2), 
+            calc((100vw + $frame-width)/2) calc((100vh + $frame-height)/2), 
+            calc((100vw - $frame-width)/2) calc((100vh + $frame-height)/2), 
+            calc((100vw - $frame-width)/2) 100vh, 
+            100% 100%,
+            100% 0vh
+        );
+    
+        .frame {
+            background:transparent;
+            top: 50vh;
+            left: 50vw;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            width: $frame-width; 
+            height: $frame-height;
+        }
+    }
+
+    .main-section {
+        will-change: transform;
+        position:absolute;
+        width:200vw;
+        height:100vh;
+        top:0;
+    }
+
+    .tank-section {
+        will-change: transform;
+        position:absolute;
+        width:100vw;
+        height:100vh;
+        top:0;
+        clip-path: polygon(
+            0vw 0vh, 
+            0vw 100vh, 
+            calc((100vw - $frame-width)/2) 100vh, 
+            calc((100vw - $frame-width)/2) calc((100vh - $frame-height)/2), 
+            calc((100vw + $frame-width)/2) calc((100vh - $frame-height)/2), 
+            calc((100vw + $frame-width)/2) calc((100vh + $frame-height)/2), 
+            calc((100vw - $frame-width)/2) calc((100vh + $frame-height)/2), 
+            calc((100vw - $frame-width)/2) 100vh, 
+            100% 100%,
+            100% 0vh
+        );
+
+        .tank {
+            background:transparent;
+            top: 50vh;
+            left: 50vw;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            width: $frame-width; 
+            height: $frame-height;
+        }
+    }
+
+
 }
 
-.castleWorld {
-    will-change: transform;
-    position:absolute;
-    width:200vw;
-    height:100vh;
-    top:0;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
-    
-    .ceiling {
-        background-image: url(/castle-ceiling.svg); 
-        background-size:contain;
-        height: 10%;
-        top: 0;
-        width: 100%;
-        position: absolute;
+.waterWorld {
+    background: $water-color;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+
+    .tank-section {
+        will-change: transform;
+        position:absolute;
+        width:100vw;
+        height:100vh;
+        top:0;
+        background: $water-color;
+    }
+
+    .main-section {
+        will-change: transform;
+        position:absolute;
+        width:200vw;
+        height:100vh;
+        top:0;
+        background: $water-color;
     }
 
     .ground {
-        background-image: url(/castle-floor.svg); 
+        background-image: url(/sand.svg); 
         background-size:contain;
         height: 20%;
         bottom: 0;
