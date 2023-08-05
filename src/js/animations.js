@@ -15,17 +15,22 @@ let masterTL = null;
 export function animations() {
 	masterTL = gsap.timeline({
 		//yoyo: true,
-		repeat: -1,
-		repeatDelay: 1,
+		//repeat: -1,
+		//repeatDelay: 1,
 		ease: 'none',
-		/*scrollTrigger: {
-			scrub:true,
+		scrollTrigger: {
+			scrub: 0.5,
 			pin: '#app',
-			end: '3000%'
-		}*/
+			end: '5000%',
+			onUpdate: function(self) {
+				onScrollUpdate(self)
+			}
+		}
 	})
 
 	initPlayer()
+	window.addEventListener("scroll", onScroll)
+	//window.addEventListener("scrollend", onScrollEnd)
 	masterTL.addLabel('start')
 	masterTL.add(overworldTL())
 	masterTL.addLabel('sky-world-start')
@@ -68,17 +73,12 @@ function overworldTL() {
 	let ground = overworld.querySelector('.ground');
 	let cloudsElem = overworld.querySelector('.backgrounds > .clouds');
 	let skyworld = document.querySelector('.skyworld')
-
-
-	tl.call(playerWalk)
 	tl.to(ground, { x:() => windowWidth - ground.clientWidth })
 	tl.fromTo(skyworld, { x:() => ground.clientWidth - windowWidth }, { x: 0 }, "0")
 
 	overworld.querySelectorAll('.backgrounds > *').forEach((background) => {
 		tl.add(parallaxBackground(background), "0");
 	})
-
-	tl.call(playerStand)
 
 	return tl;	
 }
@@ -98,7 +98,8 @@ function skyworldTL() {
 	let skyWorldDuration = skyworld.clientHeight / scrollRatePerSecond;
 
 	tl.addLabel('skyworld-show')
-	tl.call(playerClimb)
+	tl.call(() => { playerIsOnLadder = false })
+	tl.call(() => { playerIsOnLadder = true })
 	tl.to(overworld, {y: windowHeight})
 	tl.fromTo(skyworld, {
 		y:() => window.scrollY - skyworld.clientHeight, 
@@ -135,17 +136,15 @@ function castleWorldTL() {
 	let playerExitDuration = globalDuration * (playerXDistanceToRight / windowWidth);
 
 	tl.addLabel('castle-show')
-	tl.call(playerStand)
 	tl.to(skyworld, { scale: () => frame.clientWidth / windowWidth }, 'show-castle')
 	tl.to(skyworld, { y:() => windowHeight/2 - frame.clientHeight/2, transformOrigin: 'top' }, 'show-castle')
 	tl.from(frameSection, { scale: () => windowWidth / frame.clientWidth }, 'show-castle')
 	tl.add(revealPlayer(player))
-	tl.call(playerWalk)
+	tl.call(() => { playerIsOnLadder = true })
+	tl.call(() => { playerIsOnLadder = false })
 	tl.set(player, { x:  -playerXDistanceToLeft })
 	tl.to(player, { x: 0, duration: playerEntryDuration })
-	tl.call(playerStand)
 	tl.addLabel('castle-pan-left')
-	tl.call(playerWalk)
 	tl.to(skyworld, { x: -windowWidth }, "castle-pan-left")
 	tl.to(frameSection, { x: -windowWidth }, "castle-pan-left")
 	tl.fromTo(mainSection, { x: windowWidth }, {x: -mainSection.clientWidth , duration: mainSectionDuration + globalDuration  }, "castle-pan-left")
@@ -180,7 +179,6 @@ function waterWorldTL() {
 	tl.to(player, { scale: 1 } , 'water-show-tank')
 	tl.from(waterTankSection, { scale: () => castleTank.clientWidth / windowWidth }, 'water-show-tank')
 	tl.to(castleTankSection, { scale: () => windowWidth / castleTank.clientWidth }, 'water-show-tank')
-	tl.call(playerWalk)
 	tl.set(player, { x:  -playerXDistanceToLeft })	
 	tl.to(player, { x: 0, duration: playerEntryDuration })
 	tl.addLabel('water-pan-left')
@@ -246,10 +244,8 @@ function initPlayer() {
 	playerTL.set(player, { backgroundPosition: '100% 50%'}, "<0.2")
 	playerTL.set( {}, {}, "<0.2" ).addLabel('walk-end')
 	playerTL.set(player, { backgroundPosition: '100% 75%'}, '4').addLabel('climb-start')
-	playerTL.set(player, { backgroundPosition: '100% 100%'}, "<0.2")
-	playerTL.set( {}, {}, "<0.2" ).addLabel('climb-end')
-
-	playerTL.timeScale()
+	playerTL.set(player, { backgroundPosition: '100% 100%'}, "<0.3")
+	playerTL.set( {}, {}, "<0.3" ).addLabel('climb-end')
 
 }
 
@@ -284,3 +280,63 @@ function revealPlayer(activePlayer) {
 	return tl
 }
 
+let playerIsMoving = null;
+let playerDirection = 1;
+let playerIsOnLadder = false;
+
+
+function onScrollUpdate(scrollTrigger) {
+	//console.log("progress:", self.progress.toFixed(3), "direction:", self.direction, "velocity", self.getVelocity());
+
+
+	//playerTL.timeScale( 0.2 )
+
+	// Change directions
+	if (scrollTrigger.direction != playerDirection ) {
+		playerDirection = scrollTrigger.direction
+		gsap.set(player, { scaleX: playerDirection})
+	}
+
+
+
+
+	// Animate Movement
+	if (playerIsMoving == false) {
+		playerTL.timeScale( 1 );
+		if (playerIsOnLadder) {
+			playerClimb()
+		} else {
+			playerWalk()
+		}
+		playerIsMoving = true
+		clearTimeout(window.scrollEndTimer)
+		window.scrollEndTimer = setTimeout(scrollEnd, 500) // Scrolltrigger only fires an update about once every 200ms, so we need to time a little beyond that.
+	}
+	
+}
+
+
+function onScroll(event) {
+	if (playerIsMoving === null) {
+		playerIsMoving = false;
+	}
+	
+}
+
+function scrollEnd() {
+	if (playerIsMoving) {
+		playerIsMoving = false;
+		if (playerIsOnLadder) {
+			playerTL.timeScale( 0 );
+		} else {
+			playerStand()
+		}
+		
+	}
+}
+
+function calculateWalkSpeed(velocity) {
+	let playerWidth = 200;
+	let speed = velocity / playerWidth ;
+	return speed;
+}
