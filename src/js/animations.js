@@ -9,6 +9,10 @@ let windowHeight = document.documentElement.clientHeight;
 let player = document.querySelector('.player');
 let playerTL = null;
 let masterTL = null;
+let playerIsMoving = null;
+let playerDirection = 1;
+let playerIsOnLadder = false;
+
 
 
 
@@ -69,11 +73,13 @@ function overworldTL() {
 	});
 
 	let overworld = document.querySelector('.overworld');
-	
 	let ground = overworld.querySelector('.ground');
+	let content = overworld.querySelector('.content')
 	let cloudsElem = overworld.querySelector('.backgrounds > .clouds');
 	let skyworld = document.querySelector('.skyworld')
-	tl.to(ground, { x:() => windowWidth - ground.clientWidth })
+
+	generateClouds(cloudsElem)
+	tl.to([ground, content], { x:() => windowWidth - ground.clientWidth })
 	tl.fromTo(skyworld, { x:() => ground.clientWidth - windowWidth }, { x: 0 }, "0")
 
 	overworld.querySelectorAll('.backgrounds > *').forEach((background) => {
@@ -280,11 +286,6 @@ function revealPlayer(activePlayer) {
 	return tl
 }
 
-let playerIsMoving = null;
-let playerDirection = 1;
-let playerIsOnLadder = false;
-
-
 function onScrollUpdate(scrollTrigger) {
 	//console.log("progress:", self.progress.toFixed(3), "direction:", self.direction, "velocity", self.getVelocity());
 
@@ -314,7 +315,6 @@ function onScrollUpdate(scrollTrigger) {
 	}
 	
 }
-
 
 function onScroll(event) {
 	if (playerIsMoving === null) {

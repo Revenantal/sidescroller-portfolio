@@ -1,17 +1,17 @@
 @import '_variables.scss';
 
 
-$sky-color: #D0F4F7;
-$water-color: #A1D6E7;
-
-
-$frame-width: 20vw;
-$frame-height: 20vh;
-
 body, html {
     margin: 0;
     padding:0;
     overflow-x: hidden;
+    font-family: $body-font-family;
+}
+
+h1, h2, h3, h4, h5, h6, .title {
+    font-weight:normal;
+    font-family: $heading-font-family;
+    margin-top:0;
 }
 
 #app {
@@ -20,23 +20,8 @@ body, html {
     height: 100vh;
 }
 
-.player {
-    position: absolute;
-    bottom: 20%;
-    left: 120px;
-    height:200px;
-    width:174px;
-    background-image: url(/player-sprite.svg);
-    background-size:contain;
-    background-repeat: no-repeat;
-    background-size: 100% 500%;
-
-}
-
-
 .overworld {
     will-change: transform;
-    width: 200vw;
     height: 100vh;
     position: absolute;
     left:0;
@@ -45,14 +30,100 @@ body, html {
         background-image: url(/grass.svg); 
         background-size:contain;
         height:20%;
-        bottom: 20%;
-        position: relative;
+        bottom: 0%;
+        position: absolute;
+        width:100%;
     }
+
+    .content {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+
+        & > .section {
+            position:relative;
+            height: 100%;
+
+            > * {
+                position: relative;
+            }
+
+            &#intro {
+                min-width: 1920px;
+                .sign {
+                    left: 300px;
+                    bottom: 20%;
+                }
+
+                .grass-leaf {
+                    left: 500px;
+                    bottom: 20%;
+                }
+
+                .bush {
+                    left: 1300px;
+                    bottom: 20%;
+                }
+    
+                .tree {
+                    left: 1600px;
+                    bottom: 20%;
+                }
+            }
+
+            &#capabilities {
+                width: 1600px;
+
+                .heading {
+                    top: 30px;
+                    text-align:center;
+                    margin-bottom:100px;
+                }
+
+                .bush {
+                    left: 1100px;
+                    bottom: 20%;
+                }
+
+                .capabilites {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: stretch;
+                    justify-content: space-evenly;
+
+
+                    .capability {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        .star {
+                            margin-top: 10px;
+                            width: 90px;
+
+                            &.faded {
+                                opacity: 25%;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &#ladder-section {
+                width: 100vw;
+            }
+        }
+    }
+
+
+
 
     .backgrounds {
         height: 100%;
         width: 100%;
-        position: relative;
+        position: absolute;
         background: $sky-color;
 
         div {
@@ -260,5 +331,58 @@ body, html {
         bottom: 0;
         width: 100%;
         position: absolute;
+    }
+}
+
+.absolute,
+.overworld .content > .section > *.absolute {
+    position: absolute;
+}
+
+.player {
+    position: absolute;
+    bottom: 20%;
+    left: 120px;
+    height:200px;
+    width:174px;
+    background-image: url(/player-sprite.svg);
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-size: 100% 500%;
+}
+
+.speech-bubble {
+    max-width:600px;
+    top:45px;
+    background:white;
+    padding:50px;
+    box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.1);
+    border-radius: 50px;
+    margin: 0 auto;
+
+    p:last-of-type {
+        margin-bottom:0;
+    }
+}
+
+.banner {
+    top:30px;
+    background-image: url(/banner.svg);
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position:center;
+    color:white;
+    height: 123px;
+    width: 600px;
+    padding-top:6px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+
+    * {
+        margin-top: 0;
+        margin-bottom: 0;
     }
 }
