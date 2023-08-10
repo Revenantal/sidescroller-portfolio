@@ -96,23 +96,27 @@ function skyworldTL() {
 			ease: 'linear'
 		}
 	});
+
 	let skyworld = document.querySelector('.skyworld')
+	let skyworldTitle = skyworld.querySelector('.heading')
 	let overworld = document.querySelector('.overworld')
 	let frozenPlayer = skyworld.querySelector('.frozen-player')
 
-	let scrollRatePerSecond = windowHeight / globalDuration;
-	let skyWorldDuration = skyworld.clientHeight / scrollRatePerSecond;
+	let scrollRatePerDuration = windowHeight / globalDuration;
+	let skyWorldDuration = (skyworld.clientHeight - windowHeight * 0.8) / scrollRatePerDuration;  
+
 
 	tl.addLabel('skyworld-show')
 	tl.call(() => { playerIsOnLadder = false })
 	tl.call(() => { playerIsOnLadder = true })
-	tl.to(overworld, {y: windowHeight})
+	tl.to(overworld, {y: windowHeight}, 'skyworld-show')
+	tl.fromTo(skyworldTitle, {y: windowHeight * 0.2 + skyworldTitle.clientHeight/2 }, {y: -windowHeight , duration: skyWorldDuration }, 'skyworld-show')
 	tl.fromTo(skyworld, {
-		y:() => window.scrollY - skyworld.clientHeight, 
+		y:() => 0 - skyworld.clientHeight + windowHeight * 0.8,
 	}, {
 		y: 0,
 		duration: skyWorldDuration
-	}, '<')
+	}, 'skyworld-show')
 	tl.add(snapshotPlayer(player, frozenPlayer))
 	tl.addLabel('skyworld-done')
 	return tl;

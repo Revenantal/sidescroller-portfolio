@@ -27,9 +27,9 @@ h1, h2, h3, h4, h5, h6, .title {
     left:0;
 
     .ground {
-        background-image: url(/grass.svg); 
+        background-image: url(/imgs/grass.svg); 
         background-size:contain;
-        height:20%;
+        height: $ground-height;
         bottom: 0%;
         position: absolute;
         width:100%;
@@ -52,24 +52,32 @@ h1, h2, h3, h4, h5, h6, .title {
 
             &#intro {
                 min-width: 1920px;
+
+                .banner {
+                    top: calc(20vh - 40px)
+                }
+
+                .speech-bubble{
+                    top: 20vh;
+                }
                 .sign {
                     left: 300px;
-                    bottom: 20%;
+                    bottom: $ground-height;
                 }
 
                 .grass-leaf {
                     left: 500px;
-                    bottom: 20%;
+                    bottom: $ground-height;
                 }
 
                 .bush {
                     left: 1300px;
-                    bottom: 20%;
+                    bottom: $ground-height;
                 }
     
                 .tree {
                     left: 1600px;
-                    bottom: 20%;
+                    bottom: $ground-height;
                 }
             }
 
@@ -79,15 +87,17 @@ h1, h2, h3, h4, h5, h6, .title {
                 .heading {
                     top: 30px;
                     text-align:center;
-                    margin-bottom:100px;
+                    margin-bottom:50px;
+                    top: calc(20vh)
                 }
 
                 .bush {
                     left: 1100px;
-                    bottom: 20%;
+                    bottom: $ground-height;
                 }
 
                 .capabilites {
+                    top: 20vh;
                     display: flex;
                     flex-direction: row;
                     align-items: stretch;
@@ -111,14 +121,21 @@ h1, h2, h3, h4, h5, h6, .title {
                 }
             }
 
-            &#ladder-section {
+            &#ladder{
                 width: 100vw;
+
+                .bush {
+                    left: 1100px;
+                    bottom: $ground-height;
+                }
+
+                .grass-leaf {
+                    left: 500px;
+                    bottom: $ground-height;
+                }
             }
         }
     }
-
-
-
 
     .backgrounds {
         height: 100%;
@@ -135,20 +152,20 @@ h1, h2, h3, h4, h5, h6, .title {
         .grass {
             height: 34%;
             bottom: 0;
-            background-image: url(/grass-background.svg);
+            background-image: url(/imgs/grass-background.svg);
         }
 
         .cloud-1 {
             height: 50%;
             bottom: 0%;
-            background-image: url(/cloud-background-1.svg);
+            background-image: url(/imgs/cloud-background-1.svg);
           
         }
 
         .cloud-2 {
             height: 60%;
             bottom: 0%;
-            background-image: url(/cloud-background-2.svg);
+            background-image: url(/imgs/cloud-background-2.svg);
         }
 
         .clouds {
@@ -157,7 +174,7 @@ h1, h2, h3, h4, h5, h6, .title {
             @for $i from 1 through 4 {
                 cloud:nth-child(4n + #{$i}) {
                     position: absolute;
-                    background-image: url(/cloud-#{$i}.svg);
+                    background-image: url(/imgs/cloud-#{$i}.svg);
                     background-size: contain;
                     background-repeat: no-repeat;
                 }
@@ -169,34 +186,119 @@ h1, h2, h3, h4, h5, h6, .title {
 .skyworld {
     left: 0;
     will-change: transform;
-    height:200vh; 
-    background:linear-gradient(to top, $sky-color, darken($sky-color, 50));
     position:absolute;
     width:100vw;
 
+    .background {
+        background:linear-gradient(to top, $sky-color, darken($sky-color, 50));
+        width: 100%;
+        height: calc(100% - 80vh + 2px);
+        position: absolute;
+    }
+
     .ladder {
-        height: calc(100% + 80vh);
-        top: 0;
-        bottom: -100vh;
-        background-image: url(/ladder.svg); 
+        height: 100%;
+        background-image: url(/imgs/ladder.svg); 
         background-size:contain;
         width: 150px;
         left:128px;
-        position: relative;
+        position: absolute;
+    }
+
+    .heading {
+        position: absolute;
+        top: 100vh;
+        width:100%;
+
+        .title {
+            padding:30px; 
+            background:white;
+            margin: 0 auto;
+            width: 200px;
+            text-align: center;
+        }
     }
 
     .frozen-player {
         visibility: hidden;
         position: absolute;
-        bottom: 20%;
+        bottom: $ground-height;
         left: 120px;
         height:200px;
         width:174px;
-        background-image: url(/player-sprite.svg);
+        background-image: url(/imgs/player-sprite.svg);
         background-size:contain;
         background-repeat: no-repeat;
         background-size: 100% 500%;
         background-position: 100% 75%;
+    }
+
+    .content {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        & > .section {
+            position:relative;
+
+            > * {
+                position: relative;
+            }
+
+            &#technologies {
+                width: 1200px;
+                max-width:100vw;
+                margin: 0 auto;
+
+                .speech-bubble {
+                    margin-bottom: 150px;
+                    margin-top:150px;
+                }
+            
+                .bush {
+                    left: 1100px;
+                    bottom: $ground-height;
+                }
+
+                .technologies {
+                    display: flex;
+                    flex-direction: column;
+
+                    .technology {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                        height:300px;
+                        flex-wrap: wrap;
+                        align-content: center;
+
+                        h2 {
+                            margin-bottom:0;
+                            width:200px;
+                            text-align:center;
+                        }
+                        .coin {
+                            &.faded {
+                                opacity: 25%;
+                            }
+                        }
+
+                        .notes {
+                            display:flex;
+                            flex:100%;
+                            justify-content: center;
+                            margin-top: 20px;
+                            
+                            h4 {
+                                margin-bottom:0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -206,7 +308,7 @@ h1, h2, h3, h4, h5, h6, .title {
     width:100%;
 
     .ceiling {
-        background-image: url(/castle-ceiling.svg); 
+        background-image: url(/imgs/castle-ceiling.svg); 
         background-size:contain;
         height: 10%;
         top: 0;
@@ -216,16 +318,16 @@ h1, h2, h3, h4, h5, h6, .title {
     }
 
     .ground {
-        background-image: url(/castle-floor.svg); 
+        background-image: url(/imgs/castle-floor.svg); 
         background-size:contain;
-        height: 20%;
+        height: $ground-height;
         bottom: 0;
         width: 100%;
         position: absolute;
     }
 
     .wall {
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/castle-background.svg);
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.80), rgba(0, 0, 0, 0.80)), url(/imgs/castle-background.svg);
     }
 
     .frame-section {
@@ -325,9 +427,9 @@ h1, h2, h3, h4, h5, h6, .title {
     }
 
     .ground {
-        background-image: url(/sand.svg); 
+        background-image: url(/imgs/sand.svg); 
         background-size:contain;
-        height: 20%;
+        height: $ground-height;
         bottom: 0;
         width: 100%;
         position: absolute;
@@ -341,11 +443,11 @@ h1, h2, h3, h4, h5, h6, .title {
 
 .player {
     position: absolute;
-    bottom: 20%;
+    bottom: $ground-height;
     left: 120px;
     height:200px;
     width:174px;
-    background-image: url(/player-sprite.svg);
+    background-image: url(/imgs/player-sprite.svg);
     background-size:contain;
     background-repeat: no-repeat;
     background-size: 100% 500%;
@@ -353,7 +455,6 @@ h1, h2, h3, h4, h5, h6, .title {
 
 .speech-bubble {
     max-width:600px;
-    top:45px;
     background:white;
     padding:50px;
     box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.1);
@@ -366,8 +467,7 @@ h1, h2, h3, h4, h5, h6, .title {
 }
 
 .banner {
-    top:30px;
-    background-image: url(/banner.svg);
+    background-image: url(/imgs/banner.svg);
     background-size:contain;
     background-repeat: no-repeat;
     background-position:center;
