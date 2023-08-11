@@ -26,6 +26,7 @@ export function animations() {
 			scrub: 0.5,
 			pin: '#app',
 			end: '5000%',
+			normalizeScroll: true,
 			onUpdate: function(self) {
 				onScrollUpdate(self)
 			}
@@ -44,23 +45,6 @@ export function animations() {
 	masterTL.addLabel('water-world-start')
 	masterTL.add(waterWorldTL())
 	masterTL.addLabel('end')
-
-
-	let testTL = gsap.timeline({
-		//yoyo: true,
-		repeat: -1,
-		//repeatDelay: 5,
-		ease: 'none',
-	})
-	//testTL.add(masterTL.tweenFromTo(2, 5));
-	//masterTL.pause()
-
-	document.addEventListener('keyup', event => {
-		if (event.code === 'Space') {
-			testTL.paused( !testTL.paused() );
-		}
-	})
-
 
 }
 
@@ -118,6 +102,7 @@ function skyworldTL() {
 		duration: skyWorldDuration
 	}, 'skyworld-show')
 	tl.add(snapshotPlayer(player, frozenPlayer))
+	tl.set(skyworld, {className: 'skyworld clipped'})
 	tl.addLabel('skyworld-done')
 	return tl;
 }
