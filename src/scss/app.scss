@@ -14,6 +14,10 @@ h1, h2, h3, h4, h5, h6, .title {
     margin-top:0;
 }
 
+a { 
+    text-decoration: none;
+}
+
 #app {
     position: fixed;
     width: 100vw;
@@ -239,7 +243,7 @@ h1, h2, h3, h4, h5, h6, .title {
         left: 120px;
         height:200px;
         width:174px;
-        background-image: url(/imgs/player-sprite.svg);
+        background-image: url(/imgs/adrian-sprite.svg);
         background-size:contain;
         background-repeat: no-repeat;
         background-size: 100% 500%;
@@ -388,7 +392,6 @@ h1, h2, h3, h4, h5, h6, .title {
                 }
 
                 &#experience {
-                    //top: 25vh;
                     display: flex;
 
                     .experience {
@@ -455,18 +458,6 @@ h1, h2, h3, h4, h5, h6, .title {
         width:100vw;
         height:100vh;
         top:0;
-        clip-path: polygon(
-            0vw 0vh, 
-            0vw 100vh, 
-            calc((100vw - $frame-width)/2) 100vh, 
-            calc((100vw - $frame-width)/2) calc((100vh - $frame-height)/2), 
-            calc((100vw + $frame-width)/2) calc((100vh - $frame-height)/2), 
-            calc((100vw + $frame-width)/2) calc((100vh + $frame-height)/2), 
-            calc((100vw - $frame-width)/2) calc((100vh + $frame-height)/2), 
-            calc((100vw - $frame-width)/2) 100vh, 
-            100% 100%,
-            100% 0vh
-        );
 
         .tank {
             background:transparent;
@@ -483,7 +474,6 @@ h1, h2, h3, h4, h5, h6, .title {
 }
 
 .waterWorld {
-    background: $water-color;
     height: 100%;
     position: absolute;
     width: 100%;
@@ -495,15 +485,90 @@ h1, h2, h3, h4, h5, h6, .title {
         height:100vh;
         top:0;
         background: $water-color;
+
+        .sign {
+            bottom: $frame-height;
+            left:50%;
+            transform:translate(-50%);
+            width:200px;
+        }
+
+        .seaweed {
+            bottom: $frame-height;
+            left: 30%;
+        }
+
+        .coral {
+            bottom: $frame-height;
+            left: 60%;
+        }
     }
 
     .main-section {
         will-change: transform;
         position:absolute;
-        width:200vw;
         height:100vh;
         top:0;
         background: $water-color;
+
+        .content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+    
+            & > .section {
+                position:relative;
+    
+                > * {
+                    position: relative;
+                }
+
+                &#projects {
+                    display: flex;
+                    height:100%;
+
+                    .project {
+                        width:500px;
+                        padding:0 100px;
+                        display: flex;
+                        bottom: 20vh;
+                        justify-content: flex-end;
+                        flex-direction: column;
+                        
+                        .name {
+                            background-image: url(/imgs/stone-sign.svg); 
+                            background-size:contain;
+                            background-repeat: no-repeat;
+                            height: 120px;
+                            background-position: center;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index:2;
+                            position: relative;
+                            text-align:Center;
+
+                            h2 {
+                                margin-bottom:0;
+                            }
+                        }
+
+                        .details {
+                            background-image: url(/imgs/stone-large.svg); 
+                            background-size:contain;
+                            background-repeat: no-repeat;
+                            padding: 40px 60px;
+                            height: 238px;
+                            width: 380px;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                        }
+                    }
+                }        
+            }
+        }
     }
 
     .ground {
@@ -527,7 +592,7 @@ h1, h2, h3, h4, h5, h6, .title {
     left: 120px;
     height:200px;
     width:174px;
-    background-image: url(/imgs/player-sprite.svg);
+    background-image: url(/imgs/adrian-sprite.svg);
     background-size:contain;
     background-repeat: no-repeat;
     background-size: 100% 500%;
@@ -564,5 +629,39 @@ h1, h2, h3, h4, h5, h6, .title {
     * {
         margin-top: 0;
         margin-bottom: 0;
+    }
+}
+
+.stone-text {
+    color:#707F80;
+    text-shadow: 1px 1px rgb(255 255 255 / 50%);
+}
+
+.btn {
+    font-size:22px;
+    transition: filter 0.1s;
+
+    &.center {
+        margin: 0 auto;
+    }
+
+    &.stone {
+        color:#707F80;
+        text-shadow: 1px 1px rgb(255 255 255 / 50%);
+        font-family: $heading-font-family;
+        padding:10px;
+        background-image: url(/imgs/stone-button.svg); 
+        background-size:contain;
+        background-repeat:no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 40px;
+
+
+        &:hover, &:active {
+            filter: brightness(0.9);
+        }
     }
 }

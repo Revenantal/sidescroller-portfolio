@@ -164,21 +164,22 @@ function waterWorldTL() {
 	let castleTank = castleTankSection.querySelector('.tank')
 	let waterMainSection = waterWorld.querySelector('.main-section')
 
+
+
 	let panSpeed = windowWidth / globalDuration;
 	let waterMainSectionDuration = waterMainSection.clientWidth / panSpeed;
 	let playerXDistanceToLeft =  player.getBoundingClientRect().x + player.clientWidth
 	let playerEntryDuration = globalDuration * (playerXDistanceToLeft / windowWidth);
 
-
 	tl.addLabel('water-show-tank')
-	tl.to(player, { scale: 1 } , 'water-show-tank')
 	tl.from(waterTankSection, { scale: () => castleTank.clientWidth / windowWidth }, 'water-show-tank')
 	tl.to(castleTankSection, { scale: () => windowWidth / castleTank.clientWidth }, 'water-show-tank')
 	tl.set(player, { x:  -playerXDistanceToLeft })	
 	tl.to(player, { x: 0, duration: playerEntryDuration })
+	tl.set(waterWorld, {className: 'waterWorld'})
 	tl.addLabel('water-pan-left')
 	tl.to(waterTankSection, { x: -windowWidth }, 'water-pan-left')
-	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -windowWidth, duration: waterMainSectionDuration  }, 'water-pan-left')
+	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -waterMainSection.clientWidth, duration: waterMainSectionDuration + globalDuration }, 'water-pan-left')
 
 	return tl;
 }
@@ -276,19 +277,11 @@ function revealPlayer(activePlayer) {
 }
 
 function onScrollUpdate(scrollTrigger) {
-	//console.log("progress:", self.progress.toFixed(3), "direction:", self.direction, "velocity", self.getVelocity());
-
-
-	//playerTL.timeScale( 0.2 )
-
 	// Change directions
 	if (scrollTrigger.direction != playerDirection ) {
 		playerDirection = scrollTrigger.direction
 		gsap.set(player, { scaleX: playerDirection})
 	}
-
-
-
 
 	// Animate Movement
 	if (playerIsMoving == false) {
