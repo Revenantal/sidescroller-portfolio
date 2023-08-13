@@ -349,6 +349,13 @@ h1, h2, h3, h4, h5, h6, .title {
         width:100vw;
         height:100vh;
         top:0;
+
+        .sign {
+            position: absolute;
+            bottom: $ground-height;
+            width: 200px;
+            right: 400px;
+        }
     
         .frame {
             background: red;
@@ -365,9 +372,81 @@ h1, h2, h3, h4, h5, h6, .title {
     .main-section {
         will-change: transform;
         position:absolute;
-        width:200vw;
         height:100vh;
         top:0;
+
+        .content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+    
+            & > .section {
+                position:relative;
+    
+                > * {
+                    position: relative;
+                }
+
+                &#experience {
+                    //top: 25vh;
+                    display: flex;
+
+                    .experience {
+                        width:500px;
+                        color: white;
+                        padding:0 100px;
+                        top:10vh;
+
+
+                        .chains {
+                            height: 200px;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-around;
+
+                            .chain {
+                                background-image: url(/imgs/chains.svg);
+                                background-repeat: repeat-y;
+                                height: 100%;
+                                width: 30px;
+                            }
+                        }
+                        
+                        .company {
+                            background-image: url(/imgs/stone-sign.svg); 
+                            background-size:contain;
+                            background-repeat: no-repeat;
+                            height: 120px;
+                            background-position: center;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index:2;
+                            position: relative;
+
+                            h2 {
+                                margin-bottom:0;
+                            }
+                        }
+
+                        .details {
+                            background-image: url(/imgs/wood-large-sign.svg); 
+                            background-size:contain;
+                            background-repeat: no-repeat;
+                            padding: 60px;
+                            height: 200px;
+                            top: -40px;
+                            position: relative;
+                            
+                            .role {
+                                text-align:center;
+                                font-weight:bold;
+                            }
+                        }
+                    }
+                }        
+            }
+        }
     }
 
     .tank-section {
