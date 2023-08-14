@@ -323,7 +323,7 @@ a {
     position:absolute;
     height:100%;
     width:100%;
-    background: black;
+    background: #1b2121;
 
     .ceiling {
         background-image: url(/imgs/castle-ceiling.svg); 
@@ -332,7 +332,9 @@ a {
         top: 0;
         width: 100%;
         position: absolute;
-        will-change: transform;
+        padding-right: 1px;
+    margin-left: -1px;
+        
     }
 
     .ground {
@@ -342,6 +344,8 @@ a {
         bottom: 0;
         width: 100%;
         position: absolute;
+        padding-right: 1px;
+        margin-left: -1px;
     }
 
     .wall {
