@@ -398,12 +398,16 @@ a {
 
                 &#experience {
                     display: flex;
+                    height:100%;
 
                     .experience {
                         width:500px;
                         color: white;
                         padding:0 100px;
-                        top:10vh;
+                        display: flex;
+                        bottom: 30vh;
+                        justify-content: flex-end;
+                        flex-direction: column;
 
 
                         .chains {
@@ -411,6 +415,7 @@ a {
                             display: flex;
                             flex-direction: row;
                             justify-content: space-around;
+                            flex-grow: 1;
 
                             .chain {
                                 background-image: url(/imgs/chains.svg);
@@ -443,8 +448,8 @@ a {
                             background-repeat: no-repeat;
                             padding: 60px;
                             height: 200px;
-                            top: -40px;
                             position: relative;
+                            top: -40px;
                             
                             .role {
                                 text-align:center;
