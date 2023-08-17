@@ -89,12 +89,20 @@ function skyworldTL() {
 	let scrollRatePerDuration = windowHeight / globalDuration;
 	let skyWorldDuration = (skyworld.clientHeight - windowHeight * 0.8) / scrollRatePerDuration;  
 
+	console.log(windowHeight * 0.2 + skyworldTitle.clientHeight/2 )
+	console.log(skyworldTitle.clientHeight);
+	console.log(-windowHeight);
 
 	tl.addLabel('skyworld-show')
 	tl.call(() => { playerIsOnLadder = false })
 	tl.call(() => { playerIsOnLadder = true })
 	tl.to(overworld, {y: windowHeight}, 'skyworld-show')
-	tl.fromTo(skyworldTitle, {y: windowHeight * 0.2 + skyworldTitle.clientHeight/2 }, {y: -windowHeight , duration: skyWorldDuration }, 'skyworld-show')
+	tl.fromTo(skyworldTitle, {
+		y:() => skyworld.clientHeight - windowHeight*1.8
+	}, {
+		y: -windowHeight, 
+		duration: skyWorldDuration 
+	}, 'skyworld-show')
 	tl.fromTo(skyworld, {
 		y:() => 0 - skyworld.clientHeight + windowHeight * 0.8,
 	}, {
