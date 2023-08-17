@@ -336,8 +336,7 @@ a {
         width: 100%;
         position: absolute;
         padding-right: 1px;
-    margin-left: -1px;
-        
+        margin-left: -1px;     
     }
 
     .ground {
@@ -492,12 +491,13 @@ a {
     width: 100%;
 
     .tank-section {
-        will-change: transform;
         position:absolute;
         width:100vw;
         height:100vh;
         top:0;
         background: $water-color;
+        padding-right: 1px;
+        margin-left: -1px;
 
         .sign {
             bottom: $frame-height;
@@ -518,11 +518,12 @@ a {
     }
 
     .main-section {
-        will-change: transform;
         position:absolute;
         height:100vh;
         top:0;
         background: $water-color;
+        padding-right: 1px;
+        margin-left: -1px;
 
         .content {
             position: relative;
