@@ -40,6 +40,7 @@ a {
     }
 
     .content {
+        will-change: transform;
         position: relative;
         height: 100%;
         width: 100%;
@@ -86,13 +87,13 @@ a {
             }
 
             &#capabilities {
-                width: 1600px;
+                width: 200vw;
+                max-width: 1600px;
+                display:flex;
 
                 .heading {
-                    top: 30px;
                     text-align:center;
                     margin-bottom:50px;
-                    top: calc(20vh)
                 }
 
                 .bush {
@@ -100,22 +101,30 @@ a {
                     bottom: $ground-height;
                 }
 
+                .inner-content {
+                    bottom: 20vh;
+                    width:100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                }
+
                 .capabilites {
-                    top: 20vh;
                     display: flex;
                     flex-direction: row;
                     align-items: stretch;
                     justify-content: space-evenly;
-
-
+                    margin-bottom: 100px;
+                
                     .capability {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
+                        justify-content: flex-end;
 
                         .star {
                             margin-top: 10px;
-                            width: 90px;
+                            width: 8vh;
 
                             &.faded {
                                 opacity: 25%;
@@ -148,6 +157,7 @@ a {
         background: $sky-color;
 
         div {
+            will-change: transform;
             background-size:contain;
             position: absolute;
             width:100%
@@ -254,6 +264,7 @@ a {
     }
 
     .content {
+        will-change: transform;
         position: relative;
         width: 100%;
         display: flex;
@@ -267,8 +278,8 @@ a {
             }
 
             &#technologies {
-                width: 1200px;
-                max-width:100vw;
+                width: 55vw;
+                max-width:1200px;
                 margin: 0 auto;
 
                 .speech-bubble {
@@ -390,6 +401,7 @@ a {
             position: relative;
             width: 100%;
             height: 100%;
+            will-change:transform;
     
             & > .section {
                 position:relative;
@@ -526,6 +538,7 @@ a {
         margin-left: -1px;
 
         .content {
+            will-change: transform;
             position: relative;
             width: 100%;
             height: 100%;
@@ -613,7 +626,8 @@ a {
 }
 
 .speech-bubble {
-    max-width:600px;
+    width:600px;
+    max-width: 90vw;
     background:white;
     padding:50px;
     box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.1);
@@ -677,5 +691,70 @@ a {
         &:hover, &:active {
             filter: brightness(0.9);
         }
+    }
+}
+
+
+@media(max-width: $breakpoint-xl) {
+    .skyworld {
+        .content {
+            .section#technologies {
+                width:90vw;
+                max-width:90vw;
+                .technologies  {
+                    .technology {
+                        h2 {
+                            width:100%;
+                            margin-bottom:20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: $breakpoint-md) {
+
+    .speech-bubble {
+        max-width:70vw;
+    }
+
+
+    .overworld {
+        .content {
+            .section {
+                &#intro {
+                    .banner {
+                        top:25px;
+                    }
+                    .speech-bubble {
+                        top: 75px;
+                    }
+                }
+            }     
+        }
+    }
+
+    .skyworld {
+        .ladder {
+            display:none;
+        }
+
+        .content {
+            .section#technologies {
+                .technologies  {
+                    .technology {
+                        .coin {
+                            width:10vw;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .frozen-player { 
+        display:none;
     }
 }
