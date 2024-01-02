@@ -85,7 +85,7 @@ function overworldTL() {
 }
 
 function skyworldTL() {
-	let duration = globalDuration;
+	let duration = globalDuration * 0.5;
 	let tl = gsap.timeline({
 		defaults: {
 			duration: duration,
@@ -99,10 +99,10 @@ function skyworldTL() {
 	let frozenPlayer = skyworld.querySelector('.frozen-player')
 	let groundOffset = document.querySelector('.overworld .ground').offsetHeight
 
-	let scrollRatePerDuration = windowHeight/ duration;
+	let scrollRatePerDuration = windowHeight / duration;
 	let skyWorldHeight = (skyworld.clientHeight - windowHeight) + groundOffset - mobileNavBarHeight
 	let skyWorldDuration = skyWorldHeight / scrollRatePerDuration;   	
-mm.add("(min-width: 1260px)", (ctx) => {
+	mm.add("(min-width: 1260px)", (ctx) => {
 			tl.addLabel('skyworld-show')
 			tl.call(() => { playerIsOnLadder = false })
 			tl.call(() => { playerIsOnLadder = true })
