@@ -6,14 +6,18 @@ gsap.registerPlugin(ScrollTrigger);
 let globalDuration = 2;
 let windowWidth = document.documentElement.clientWidth;
 let windowHeight = document.documentElement.clientHeight;
+
+
 let player = document.querySelector('.player');
 let playerTL = null;
 let masterTL = null;
 let playerIsMoving = null;
 let playerDirection = 1;
 let playerIsOnLadder = false;
+let mm = gsap.matchMedia();
 
 export function animations() {
+
 	masterTL = gsap.timeline({
 		//yoyo: true,
 		//repeat: -1,
@@ -96,29 +100,42 @@ function skyworldTL() {
 	let scrollRatePerDuration = windowHeight / duration;
 	let skyWorldDuration = (skyworld.clientHeight - windowHeight * 0.8) / scrollRatePerDuration;  
 
-	console.log(windowHeight * 0.2 + skyworldTitle.clientHeight/2 )
-	console.log(skyworldTitle.clientHeight);
-	console.log(-windowHeight);
+	/**
+	 * TODO: Something with the 0.8, and 1.8 is messing with this on mobile with notches. Using a top: -20vh seems to fix it, but causes more chaos.
+	 */
 
-	tl.addLabel('skyworld-show')
-	tl.call(() => { playerIsOnLadder = false })
-	tl.call(() => { playerIsOnLadder = true })
-	tl.to(overworld, {y: windowHeight}, 'skyworld-show')
-	tl.fromTo(skyworldTitle, {
-		y:() => skyworld.clientHeight - windowHeight*1.8
-	}, {
-		y: -windowHeight, 
-		duration: skyWorldDuration 
-	}, 'skyworld-show')
-	tl.fromTo(skyworld, {
-		y:() => 0 - skyworld.clientHeight + windowHeight * 0.8,
-	}, {
-		y: 0,
-		duration: skyWorldDuration
-	}, 'skyworld-show')
-	tl.add(snapshotPlayer(player, frozenPlayer))
+		mm.add("(min-width: 767px)", (ctx) => {
+			tl.addLabel('skyworld-show')
+			tl.call(() => { playerIsOnLadder = false })
+			tl.call(() => { playerIsOnLadder = true })
+		})
+		mm.add("(max-width: 767px)", (ctx) => {
+			tl.to(player, { x: windowWidth - player.getBoundingClientRect().x, duration: duration / 2 })
+			tl.addLabel('skyworld-show')
+		})
+		tl.to(overworld, {y: windowHeight}, 'skyworld-show')
+		tl.fromTo(skyworldTitle, {
+			y:() => skyworld.clientHeight - windowHeight*1.8
+		}, {
+			y: -windowHeight, 
+			duration: skyWorldDuration 
+		}, 'skyworld-show')
+		tl.fromTo(skyworld, {
+			y:() => 0 - skyworld.clientHeight + windowHeight * 0.8,
+		}, {
+			y: 0,
+			duration: skyWorldDuration
+		}, 'skyworld-show')
+
+
+	mm.add("(min-width: 767px)", (ctx) => {
+		tl.add(snapshotPlayer(player, frozenPlayer))
+	})
+
+
 	tl.set(skyworld, {className: 'skyworld clipped'})
 	tl.addLabel('skyworld-done')
+
 	return tl;
 }
 
@@ -151,8 +168,11 @@ function castleWorldTL() {
 	tl.to(skyworld, { y:() => windowHeight/2 - frame.clientHeight/2, transformOrigin: 'top', duration: duration/2 }, 'show-castle')
 	tl.from(frameSection, { scale: () => windowWidth / frame.clientWidth, duration: duration/2 }, 'show-castle')
 	tl.add(revealPlayer(player))
-	tl.call(() => { playerIsOnLadder = true })
-	tl.call(() => { playerIsOnLadder = false })
+	mm.add("(min-width: 767px)", (ctx) => {
+		tl.call(() => { playerIsOnLadder = true })
+		tl.call(() => { playerIsOnLadder = false })
+	})
+
 	tl.set(player, { x:  -playerXDistanceToLeft })
 	tl.to(player, { x: 0, duration: playerEntryDuration })
 	tl.addLabel('castle-pan-left')
