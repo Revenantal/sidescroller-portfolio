@@ -372,13 +372,6 @@ a {
         height:100vh;
         top:0;
 
-        .sign {
-            position: absolute;
-            bottom: $ground-height;
-            width: 200px;
-            right: 400px;
-        }
-    
         .frame {
             top: 50vh;
             left: 50vw;
@@ -394,6 +387,13 @@ a {
         position:absolute;
         height:100vh;
         top:0;
+
+        .sign {
+            position: absolute;
+            bottom: $ground-height;
+            width: 200px;
+        }
+    
 
         .content {
             position: relative;
@@ -417,10 +417,9 @@ a {
                         color: white;
                         padding:0 100px;
                         display: flex;
-                        bottom: 30vh;
+                        bottom: 35vh;
                         justify-content: flex-end;
                         flex-direction: column;
-
 
                         .chains {
                             height: 200px;
