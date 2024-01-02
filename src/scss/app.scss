@@ -709,15 +709,16 @@ a {
                 }
             }
         }
+        .ladder {
+            display:none;
+        }
     }
 }
 
 @media(max-width: $breakpoint-md) {
-
     .speech-bubble {
         max-width:70vw;
     }
-
 
     .overworld {
         .content {
@@ -735,10 +736,6 @@ a {
     }
 
     .skyworld {
-        .ladder {
-            display:none;
-        }
-
         .content {
             .section#technologies {
                 .technologies  {
