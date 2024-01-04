@@ -461,6 +461,11 @@ a {
                             height: 200px;
                             position: relative;
                             top: -40px;
+
+                            a {
+                                color:inherit;
+                                text-decoration: underline;
+                            }
                             
                             .role {
                                 text-align:center;
