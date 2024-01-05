@@ -522,22 +522,23 @@ a {
 
         .seaweed {
             bottom: $frame-height;
-            left: 30%;
+            left: 5%;
         }
 
         .coral {
             bottom: $frame-height;
-            left: 60%;
+            left: 50%;
         }
     }
 
     .main-section {
         position:absolute;
         height:100vh;
+        min-width:100vw;
         top:0;
         background: $water-color;
         padding-right: 1px;
-        margin-left: -1px;
+        margin-left: 0px;
 
         .content {
             will-change: transform;
@@ -599,6 +600,65 @@ a {
             }
         }
     }
+
+    .contact-section {
+        position:absolute;
+        height:100vh;
+        min-width:100vw;
+        top:0;
+        background: $water-color;
+        padding-right: 1px;
+        margin-left: 0px;
+
+        .content {
+            will-change: transform;
+            position: relative;
+            width: 100%;
+            height: 100%;
+    
+            & > .section {
+                position:relative;
+    
+                > * {
+                    position: relative;
+                }
+
+                .speech-bubble{
+                    top: 20vh;
+                }
+                .contact-elements {
+                    display: flex;
+                    justify-content: space-evenly;
+                    margin-top:30px;
+
+                    .fa-discord {
+                        color: #5865F2;
+                    }
+
+                    .fa-linkedin {
+                        color: #0077B5;
+                    }
+
+                    .fa-github {
+                        color: #333;
+                    }
+
+                    .fa-envelope {
+                        color: #333;
+                    }
+                }
+
+                .email-link {
+                    text-align: center;
+                    margin-top:20px;
+                    display:block;
+                    color: black;
+                }
+            }
+        }
+
+    }
+
 
     .ground {
         background-image: url(/imgs/sand.svg); 

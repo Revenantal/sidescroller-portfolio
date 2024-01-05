@@ -27,7 +27,7 @@ export function animations() {
 		scrollTrigger: {
 			scrub: 1,
 			pin: '#app',
-			end: '2000%',
+			end: '200%',
 			onUpdate: function(self) {
 				onScrollUpdate(self)
 			}
@@ -38,12 +38,7 @@ export function animations() {
 	initPlayer()
 	window.addEventListener("scroll", onScroll)
 	//window.addEventListener("scrollend", onScrollEnd)
-	masterTL.addLabel('start')
-	masterTL.add(overworldTL())
-	masterTL.addLabel('sky-world-start')
-	masterTL.add(skyworldTL())
-	masterTL.addLabel('castle-world-start')
-	masterTL.add(castleWorldTL())
+
 	masterTL.addLabel('water-world-start')
 	masterTL.add(waterWorldTL())
 	masterTL.addLabel('end')
@@ -199,12 +194,11 @@ function waterWorldTL() {
 	let castleTankSection = castleWorld.querySelector('.tank-section')
 	let castleTank = castleTankSection.querySelector('.tank')
 	let waterMainSection = waterWorld.querySelector('.main-section')
+	let contactSection = waterWorld.querySelector('.contact-section')
 
 
 
 	let panSpeed = windowWidth / duration;
-	//let waterMainSectionDuration = waterMainSection.clientWidth / panSpeed;
-	let waterMainSectionDuration = (waterMainSection.clientWidth - windowWidth) / panSpeed;
 	let playerXDistanceToLeft =  player.getBoundingClientRect().x + player.clientWidth
 	let playerEntryDuration = duration * (playerXDistanceToLeft / windowWidth);
 
@@ -216,9 +210,8 @@ function waterWorldTL() {
 	tl.set(waterWorld, {className: 'waterWorld'})
 	tl.addLabel('water-pan-left')
 	tl.to(waterTankSection, { x: -windowWidth }, 'water-pan-left')
-	//tl.fromTo(waterMainSection, { x: windowWidth }, { x: -waterMainSection.clientWidth, duration: waterMainSectionDuration + duration }, 'water-pan-left')
-	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -waterMainSection.clientWidth + windowWidth, duration: waterMainSectionDuration + duration }, 'water-pan-left')
-
+	tl.fromTo(waterMainSection, { x: windowWidth }, { x: -waterMainSection.clientWidth, duration: waterMainSection.clientWidth / panSpeed + duration }, 'water-pan-left')
+	tl.fromTo(contactSection, { x: windowWidth + waterMainSection.clientWidth }, { x: -contactSection.clientWidth + windowWidth, duration: (contactSection.clientWidth + waterMainSection.clientWidth  - windowWidth) / panSpeed + duration }, 'water-pan-left')
 	return tl;
 }
 
