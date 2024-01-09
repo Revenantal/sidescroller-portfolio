@@ -27,7 +27,7 @@ export function animations() {
 		scrollTrigger: {
 			scrub: 1,
 			pin: '#app',
-			end: '200%',
+			end: '2000%',
 			onUpdate: function(self) {
 				onScrollUpdate(self)
 			}
@@ -39,6 +39,12 @@ export function animations() {
 	window.addEventListener("scroll", onScroll)
 	//window.addEventListener("scrollend", onScrollEnd)
 
+	masterTL.addLabel('start')
+	masterTL.add(overworldTL())
+	masterTL.addLabel('sky-world-start')
+	masterTL.add(skyworldTL())
+	masterTL.addLabel('castle-world-start')
+	masterTL.add(castleWorldTL())
 	masterTL.addLabel('water-world-start')
 	masterTL.add(waterWorldTL())
 	masterTL.addLabel('end')
