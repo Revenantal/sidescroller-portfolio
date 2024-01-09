@@ -1,7 +1,10 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Player } from "./player";
 gsap.registerPlugin(ScrollTrigger);
 
+
+let newPlayer = new Player;
 
 let globalDuration = 2;
 let windowWidth = document.documentElement.clientWidth;
@@ -10,11 +13,7 @@ let mobileNavBarHeight = document.querySelector('#app').offsetHeight - windowHei
 
 
 let player = document.querySelector('.player');
-let playerTL = null;
 let masterTL = null;
-let playerIsMoving = null;
-let playerDirection = 1;
-let playerIsOnLadder = false;
 let mm = gsap.matchMedia();
 
 export function animations() {
@@ -29,15 +28,13 @@ export function animations() {
 			pin: '#app',
 			end: '2000%',
 			onUpdate: function(self) {
-				onScrollUpdate(self)
+				newPlayer.scrollTriggerEvent(self)
+				//onScrollUpdate(self)
 			}
 		}
 	})
 
 	ScrollTrigger.normalizeScroll(true);
-	initPlayer()
-	window.addEventListener("scroll", onScroll)
-	//window.addEventListener("scrollend", onScrollEnd)
 
 	masterTL.addLabel('start')
 	masterTL.add(overworldTL())
@@ -105,8 +102,8 @@ function skyworldTL() {
 	let skyWorldDuration = skyWorldHeight / scrollRatePerDuration;   	
 	mm.add("(min-width: 1260px)", (ctx) => {
 			tl.addLabel('skyworld-show')
-			tl.call(() => { playerIsOnLadder = false })
-			tl.call(() => { playerIsOnLadder = true })
+			tl.call(() => { newPlayer.state = 'on_ground' })
+			tl.call(() => { newPlayer.state = 'on_ladder' })
 		})
 		mm.add("(max-width: 1260px)", (ctx) => {
 
@@ -169,8 +166,8 @@ function castleWorldTL() {
 	tl.from(frameSection, { scale: () => windowWidth / frame.clientWidth, duration: duration/2 }, 'show-castle')
 	tl.add(revealPlayer(player))
 	mm.add("(min-width: 1260px)", (ctx) => {
-		tl.call(() => { playerIsOnLadder = true })
-		tl.call(() => { playerIsOnLadder = false })
+		tl.call(() => { newPlayer.state = 'on_ladder' })
+		tl.call(() => { newPlayer.state = 'on_ground' })
 	})
 
 	tl.set(player, { x:  -playerXDistanceToLeft })
@@ -251,36 +248,6 @@ function generateClouds(elem, count = 10) {
 	return clouds;
 }
 
-function initPlayer() {
-	playerTL = gsap.timeline({
-		paused: true,
-		ease: 'none',
-	});
-
-	let player = document.querySelector('.player')
-
-	playerTL.set(player, { backgroundPosition: '100% 0%'}, "0").addLabel('stand')
-	playerTL.set(player, { backgroundPosition: '100% 25%'}, "2").addLabel('walk-start')
-	playerTL.set(player, { backgroundPosition: '100% 50%'}, "<0.2")
-	playerTL.set( {}, {}, "<0.2" ).addLabel('walk-end')
-	playerTL.set(player, { backgroundPosition: '100% 75%'}, '4').addLabel('climb-start')
-	playerTL.set(player, { backgroundPosition: '100% 100%'}, "<0.3")
-	playerTL.set( {}, {}, "<0.3" ).addLabel('climb-end')
-
-}
-
-function playerStand() {
-	playerTL.tweenFromTo("stand", 0)
-}
-
-function playerClimb() {
-	playerTL.tweenFromTo("climb-start", "climb-end", { onComplete: playerClimb } )
-}
-
-function playerWalk() {
-	playerTL.tweenFromTo("walk-start", "walk-end", { onComplete: playerWalk } )
-}
-
 function snapshotPlayer(activePlayer, frozenPlayer) {
 
 	let tl = gsap.timeline()
@@ -300,43 +267,5 @@ function revealPlayer(activePlayer) {
 	return tl
 }
 
-function onScrollUpdate(scrollTrigger) {
-	// Change directions
-	if (scrollTrigger.direction != playerDirection ) {
-		playerDirection = scrollTrigger.direction
-		gsap.set(player, { scaleX: playerDirection})
-	}
 
-	// Animate Movement
-	if (playerIsMoving == false) {
-		playerTL.timeScale( 1 );
-		if (playerIsOnLadder) {
-			playerClimb()
-		} else {
-			playerWalk()
-		}
-		playerIsMoving = true
-		clearTimeout(window.scrollEndTimer)
-		window.scrollEndTimer = setTimeout(scrollEnd, 500) // Scrolltrigger only fires an update about once every 200ms, so we need to time a little beyond that.
-	}
-	
-}
 
-function onScroll(event) {
-	if (playerIsMoving === null) {
-		playerIsMoving = false;
-	}
-	
-}
-
-function scrollEnd() {
-	if (playerIsMoving) {
-		playerIsMoving = false;
-		if (playerIsOnLadder) {
-			playerTL.timeScale( 0 );
-		} else {
-			playerStand()
-		}
-		
-	}
-}
