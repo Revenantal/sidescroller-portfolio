@@ -204,6 +204,11 @@ function waterWorldTL() {
 		generateBubbles(bubbleElem)
 	});
 
+	let fishElems = waterWorld.querySelectorAll('.backgrounds .fish');
+	fishElems.forEach((fishElem) => {
+		generateFish(fishElem)
+	});
+
 	
 
 	let panSpeed = windowWidth / duration;
@@ -290,6 +295,55 @@ function generateBubbles(elem, count = 10) {
 	}
 	elem.appendChild(frag);
 	return bubbles;
+
+}
+
+function generateFish(elem, count = 5) {
+	let frag = document.createDocumentFragment();
+	let fishes = [];
+	let fishClasses = [
+		'fish-1',
+		'fish-2',
+		'fish-3',
+		'fish-4',
+	]
+
+	for (let i = 0; i < count; i++) {
+		
+		let fish = document.createElement('fish');
+		fish.classList.add(fishClasses[Math.floor(Math.random() * fishClasses.length)]);
+		frag.appendChild(fish);
+
+
+
+		gsap.set(fish, {
+			width: "random(30, 130, 1)",
+			left: "random(5, 95, 1)%",
+			top: "random(5, 90)%",
+		})
+
+  		randomizeFish()
+		function randomizeFish() {
+
+			let left = gsap.utils.random(5, 95) + "%";
+			let direction = left > fish.style.left ? 1 : -1;
+
+
+			gsap.to(fish, {
+				scaleX: direction,
+			})
+			gsap.to(fish, {
+				left: left,
+				top: "random(5, 95)%",
+				duration: "random(5, 20)",
+				ease: "sine.inOut",
+				onComplete: randomizeFish
+			})
+		}
+		fishes.push(fish);
+	}
+	elem.appendChild(frag);
+	return fishes;
 
 }
 
