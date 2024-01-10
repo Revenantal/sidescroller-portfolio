@@ -199,7 +199,12 @@ function waterWorldTL() {
 	let waterMainSection = waterWorld.querySelector('.main-section')
 	let contactSection = waterWorld.querySelector('.contact-section')
 
+	let bubbleElems = waterWorld.querySelectorAll('.backgrounds .bubbles');
+	bubbleElems.forEach((bubbleElem) => {
+		generateBubbles(bubbleElem)
+	});
 
+	
 
 	let panSpeed = windowWidth / duration;
 	let playerXDistanceToLeft =  player.getBoundingClientRect().x + player.clientWidth
@@ -246,6 +251,46 @@ function generateClouds(elem, count = 10) {
 	}
 	elem.appendChild(frag);
 	return clouds;
+}
+
+function generateBubbles(elem, count = 10) {
+	let frag = document.createDocumentFragment();
+	let bubbles = [];
+
+	for (let i = 0; i < count; i++) {
+		
+		let bubble = document.createElement('bubble');
+		frag.appendChild(bubble);
+
+
+		gsap.fromTo(bubble,{
+			left: "random(0, 95, 1)%",
+			y: "100vh",
+			width: "random(30, 80, 1)px",
+		}, {
+			y: "-100%",
+			repeat: -1,
+			duration: "random(5, 20)",
+			ease: 'linear',
+			delay: "random(0,5)",
+			repeatRefresh: true
+		})
+
+		gsap.fromTo(bubble,{
+			x: "0",
+		}, {
+			x: "100%",
+			repeat: -1,
+			yoyo: true,
+			ease: "sine.inOut",
+			duration: "random(1, 2)",
+		})
+
+		bubbles.push(bubble);
+	}
+	elem.appendChild(frag);
+	return bubbles;
+
 }
 
 function snapshotPlayer(activePlayer, frozenPlayer) {
