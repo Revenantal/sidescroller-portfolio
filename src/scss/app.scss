@@ -30,6 +30,18 @@ a {
     position: absolute;
     left:0;
 
+    .navigation-prompt {
+        position: absolute;
+        width: 200px;
+        text-align: center;
+        left: 120px;
+        top: 20vh;
+
+        .arrow {
+            width: 65px;
+        }
+    }
+
     .ground {
         background-image: url(/imgs/grass.svg); 
         background-size:contain;

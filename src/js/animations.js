@@ -36,6 +36,8 @@ export function animations() {
 
 	ScrollTrigger.normalizeScroll(true);
 
+	promptAnimation();
+
 	masterTL.addLabel('start')
 	masterTL.add(overworldTL())
 	masterTL.addLabel('sky-world-start')
@@ -364,6 +366,31 @@ function revealPlayer(activePlayer) {
 	let tl = gsap.timeline()
 	tl.set(activePlayer, { autoAlpha: 1 })
 	return tl
+}
+
+function promptAnimation() {
+	let promptElem = document.querySelector('.navigation-prompt');
+	let arrowTL = gsap.timeline({
+		repeat: -1,
+		repeatDelay: 1,
+		defaults: {
+			duration: 2
+		}
+	})
+	arrowTL.fromTo(promptElem.querySelector('.arrow'),{
+		autoAlpha:0
+	}, {
+		autoAlpha:1,
+		duration: 0.2
+	})
+	arrowTL.to(promptElem.querySelector('.arrow'), {
+		y:20,
+		ease: "elastic.out(1,0.3)",
+	}, "0")
+	arrowTL.to(promptElem.querySelector('.arrow'), {
+		autoAlpha:0,
+		duration: 0.5,
+	}, "+=1")
 }
 
 
