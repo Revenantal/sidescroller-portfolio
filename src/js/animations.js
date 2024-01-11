@@ -48,6 +48,42 @@ export function animations() {
 	masterTL.add(waterWorldTL())
 	masterTL.addLabel('end')
 
+	// Star Graph Animations
+	let starGraphElems = document.querySelectorAll('.star-graph')
+	starGraphElems.forEach((starGraphElem) => {
+
+		let tl = gsap.timeline({
+			scrollTrigger: {
+				scrollTrigger: starGraphElem,
+				start: "top top",
+				markers: true,
+			},
+			defaults: {
+				duration: 2,
+				ease: "elastic.out(1,0.3)",
+			}
+		})
+
+
+		let stars = starGraphElem.querySelectorAll('.star')
+		stars.forEach((star, index) => {
+			tl.from(star, {
+				autoAlpha:0,
+				scale:0.5,
+			}, stars.length/5 - index/5 )
+		})
+
+		tl.from(starGraphElem.querySelector('h2'), {
+			autoAlpha:0,
+			scale:0.5,
+		}, "<50%")
+
+		console.log(tl)
+
+	})
+
+
+
 }
 
 function overworldTL() {
